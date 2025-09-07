@@ -1,29 +1,30 @@
-// Import custom Card component to wrap the table and content
-import Card from './Card.tsx'
-// Import custom Table component to display tabular data
-import Table from './Table.tsx'
+import React from 'react' // - React core library for component creation
+import Card from './Card.tsx' // - Custom Card wrapper component for consistent styling and layout
+import Table from './Table.tsx' // - Custom Table component with built-in CRUD actions and Ant Design integration
 
-// Define and export the TabelCrudExample component
 export default function TableCrudExample({
-    columns,   // Array of column definitions for the table
-    records    // Array of data records to display in the table
-}:any) {
+  columns, // - Table column configuration with sorting, filtering, and display settings
+  records, // - Array of data objects to display in table rows
+  handleEdit, // - Function to handle Edit button clicks, loads record into form
+  handleDelete // - Function to handle Delete button clicks, removes record from data
+
+}: any) { // - Functional component that wraps Table with Card container and handles empty state
   return (
-    // Render the Card component as the main container for the table
-    <Card title="Records" style={{ height: 'fit-content' }}>
-      {/* Render the Table component with columns and data */}
+    <Card title="Records" style={{ height: 'fit-content' }}> {/* - Card container with "Records" title and auto height adjustment */}
       <Table
-        columns={columns}                  // Pass column definitions to Table
-        data={records}                     // Pass data records to Table
-        pagination={records.length > 10}   // Enable pagination if more than 10 records
-        size="middle"                      // Set table size to 'middle'
-      />
-      {/* Show an empty state message if there are no records */}
+        columns={columns} // - Pass column definitions for table structure and behavior
+        data={records} // - Pass records array as data source for table rows
+        handleEdit={handleEdit} // - Pass edit handler to Table for Edit button functionality
+        handleDelete={handleDelete} // - Pass delete handler to Table for Delete button functionality
+        pagination={records.length > 10} // - Enable pagination only when more than 10 records for better UX
+        size="middle" // - Set table size to medium for balanced spacing and readability
+      /> {/* - Reusable Table component handles rendering, actions, sorting, and filtering */}
+      {/* Empty state message */}
       {records.length === 0 && (
         <div style={{ textAlign: 'center', padding: '40px', color: '#999' }}>
           No records found. Create your first record using the form.
         </div>
-      )}
-    </Card>
+      )} {/* - Show helpful empty state message when no data exists to guide user action */}
+    </Card> //Card wrapper provides consistent styling and visual separation 
   )
 }

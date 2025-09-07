@@ -1,6 +1,9 @@
 import React from 'react';
 import { Button as AntButton } from 'antd';
 
+ 
+ 
+
 /**
  * Enhanced Button Component
  * 
@@ -15,13 +18,11 @@ import { Button as AntButton } from 'antd';
  */
 const Button: React.FC<any> = ({
   text,          // The button's display text
-  handleSubmit,       // Click handler function
+  onClick,       // Click handler function
   variant = 'secondary', // Default to secondary style
   loading = false, // Default not loading
   disabled = false, // Default enabled
   htmlType = 'button', // Default HTML button type
-  className,     // Optional CSS class
-  style,         // Optional inline styles
 }) => {
   /**
    * Maps our custom variant names to Ant Design's button types
@@ -49,12 +50,10 @@ const Button: React.FC<any> = ({
      */
     <AntButton
       type={getButtonType()}    // Visual style type
-      onClick={handleSubmit}         // Click handler
+      onClick={onClick}         // Click handler
       loading={loading}         // Loading state
       disabled={disabled}       // Disabled state
       htmlType={htmlType}       // Native button type
-      className={className}     // Custom CSS class
-      style={style}             // Inline styles
     >
       {text} {/* The visible button text */}
     </AntButton>
