@@ -2,22 +2,6 @@ import React from 'react';
 import { Button as AntButton } from 'antd';
 
 /**
- * Interface defining the Button component's props
- * 
- * @property text - Display text of the button (required)
- * @property onClick - Click handler function (optional)
- * @property variant - Visual style variant ('primary' | 'secondary')
- * @property loading - Shows loading spinner when true (default: false)
- * @property disabled - Makes button non-interactive when true (default: false)
- * @property htmlType - Native button type attribute (default: 'button')
- * 
- * Inherits from BaseComponentProps:
- * @property className - Optional CSS class for custom styling
- * @property style - Optional inline styles
- */
-
-
-/**
  * Enhanced Button Component
  * 
  * A reusable button built on Ant Design with:
@@ -30,8 +14,8 @@ import { Button as AntButton } from 'antd';
  * @param props - Configuration options for the button
  */
 const Button: React.FC<any> = ({
-  text="Create",          // The button's display text
-  // onClick,       // Click handler function
+  text,          // The button's display text
+  handleSubmit,       // Click handler function
   variant = 'secondary', // Default to secondary style
   loading = false, // Default not loading
   disabled = false, // Default enabled
@@ -65,7 +49,7 @@ const Button: React.FC<any> = ({
      */
     <AntButton
       type={getButtonType()}    // Visual style type
-      // onClick={onClick}         // Click handler
+      onClick={handleSubmit}         // Click handler
       loading={loading}         // Loading state
       disabled={disabled}       // Disabled state
       htmlType={htmlType}       // Native button type

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Select } from 'antd';
 
-
 /**
  * Enhanced Select Dropdown Component
  * 
@@ -16,8 +15,9 @@ import { Select } from 'antd';
 const SelectBox: React.FC<any> = ({
   label,          // The text label shown above the select
   options,        // Array of {label, value} objects for dropdown
-  // onChange,       // Handler when selection changes (receives new value)
-  // placeholder = 'Please select...', // Default placeholder text
+  value,          // Currently selected value (controlled)
+  handleSelectChange,       // Handler when selection changes (receives new value)
+  placeholder = 'Please select...', // Default placeholder text
   required = false, // Default to not show required indicator
   disabled = false, // Default to enabled state
   allowClear = true, // Default to showing clear button
@@ -42,6 +42,17 @@ const SelectBox: React.FC<any> = ({
       
       {/* Ant Design Select component with all configured props */}
       <Select
+        // Current selected value (undefined clears the selection)
+        value={value || undefined}
+        
+        // Handler called when selection changes
+        // Receives the new value string
+        onChange={handleSelectChange}
+        
+        // Placeholder text when nothing is selected
+        placeholder={placeholder}
+        
+        // Disables interaction when true
         disabled={disabled}
         
         // Shows X button to clear selection when true

@@ -13,6 +13,8 @@ import { Input as AntInput } from 'antd';
  * 
  * @param label - Input field label (display text above the input)
  * @param placeholder - Hint text shown when input is empty
+ * @param value - Current value of the input (controlled component)
+ * @param onChange - Callback when input value changes
  * @param required - Shows red asterisk if true
  * @param disabled - Makes input non-interactive if true
  * @param type - Determines input type (text/email/password/number)
@@ -22,6 +24,8 @@ import { Input as AntInput } from 'antd';
 const Input: React.FC<any> = ({
   label,
   placeholder,
+  value,
+  handleInputChange,
   required = false,    // Default value if not provided
   disabled = false,    // Default value if not provided
   type = 'text',       // Default value if not provided
@@ -40,9 +44,12 @@ const Input: React.FC<any> = ({
       
       {/* Ant Design Input component */}
       <AntInput
-        placeholder={placeholder}
+        placeholder={placeholder}  // Placeholder text
+        value={value}              // Controlled value
+        onChange={handleInputChange}        // Change handler
         disabled={disabled}       // Disabled state
-        type={type}    
+        type={type}               // Input type
+        // Note: AntInput automatically handles accessibility attributes
       />
     </div>
   );

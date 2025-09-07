@@ -1,57 +1,133 @@
-// Import React and useState for state management in functional components
-import { useState } from 'react'
-// Import ColumnsType for typing table columns from Ant Design
-import type{ ColumnsType } from 'antd/es/table';
+import React, { useState } from 'react'
+import { message } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
 
-// Define and export the useCrudExample custom hook
+
 export default function useCrudExample() {
 
-  // Data storage (simulating a database) - holds the list of records
-  const [records, setRecords] = useState<any[]>([]);
+  // Hook: manages form and table state plus CRUD handlers for the page
 
-  // Category options for the select dropdown in the form
+  const [formData, setFormData] = useState({ name: '', category: '', description: '' }); /* formData: values for the form; setFormData: update function */
+
+  // In-memory data and UI state
+  const [records, setRecords] = useState<any[]>([]); /* records: saved items (in-memory) */
+  const [editingRecord, setEditingRecord] = useState<any | null>(null); /* editingRecord: item being edited or null */
+  const [isSubmitting, setIsSubmitting] = useState(false); /* isSubmitting: true while submitting */
+
+
+
+  /**
+   * Handles input changes for form fields
+   * @param field - The field name to update
+   * @returns Change event handler
+   */
+  const handleInputChange = (field: string) => /* returns change handler that sets field value */
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setFormData(prev => ({ ...prev, [field]: e.target.value })); /* set form field value */
+    };
+
+  /**
+   * Handles select dropdown changes
+   * @param value - The selected value
+   */
+  const handleSelectChange = (value: string) => /* set category value in formData */ {
+    setFormData(prev => ({ ...prev, category: value })); /* set category field */
+  };
+
+  /**
+   * Handles form submission for both create and update operations
+   */
+  const handleSubmit = async () => /* validate form and create a new record */ {
+    // Validate required fields
+    if (!formData.name.trim()) {
+      message.error('Name is required');
+      return;
+    }
+    if (!formData.category) {
+      message.error('Category is required');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Create new record
+      const newRecord: any = { id: Date.now().toString(), ...formData, createdAt: new Date() }; /* new record */
+      setRecords(prev => [...prev, newRecord]); /* add record to list */
+      message.success('Record created successfully!');
+
+
+      // Reset form
+      setFormData({ name: '', category: '', description: '' });
+    } catch (error) {
+      message.error('An error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  /**
+   * Loads a record into the form for editing
+   * @param record - The record to edit
+   */
+
+  /**
+   * Deletes a record from the data
+   * @param record - The record to delete
+   */
+
+
+
+  // Category options for the select dropdown
   const categoryOptions: any[] = [
     { label: 'Technology', value: 'technology' },
     { label: 'Education', value: 'education' },
     { label: 'Health', value: 'health' },
     { label: 'Finance', value: 'finance' },
     { label: 'Entertainment', value: 'entertainment' },
-  ];
+  ]; /* categoryOptions: select options */
 
-  // Table column configuration for displaying records in the table
+  // Table column configuration
   const columns: ColumnsType<any> = [
     {
-      title: 'Name', // Column header
-      dataIndex: 'name', // Field in the data source
-      key: 'name', // Unique key for the column
-      sorter: (a, b) => a.name.localeCompare(b.name), // Alphabetical sorting by name
-    },
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      sorter: (a, b) => a.name.localeCompare(b.name), // alphabetical
+    }, /* Column: Name - displays record name; sortable */
     {
       title: 'Category',
       dataIndex: 'category',
       key: 'category',
-      filters: categoryOptions.map(opt => ({ text: opt.label, value: opt.value })), // Filter options for categories
-      onFilter: (value, record) => record.category === value, // Filtering logic for category
-    },
+      filters: categoryOptions.map(opt => ({ text: opt.label, value: opt.value })),
+      onFilter: (value, record) => record.category === value, // filter by category
+    }, /* Column: Category - shows category with filter options */
     {
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
-      ellipsis: true, // Truncate long text with ellipsis
-    },
+      ellipsis: true, // truncate long text
+    }, /* Column: Description - optional text, truncated for display */
     {
       title: 'Created At',
       dataIndex: 'createdAt',
       key: 'createdAt',
-      render: (date: Date) => date.toLocaleDateString(), // Format date as locale string
-      sorter: (a, b) => a.createdAt.getTime() - b.createdAt.getTime(), // Sort by date
-    },
+      render: (date: Date) => date.toLocaleDateString(), // format date
+      sorter: (a, b) => a.createdAt.getTime() - b.createdAt.getTime(), // sort by date
+    }, /* Column: Created At - record creation date, formatted and sortable */
   ];
-
-  // Return the options, records, and columns for use in components
   return {
-    categoryOptions,
-    records,
-    columns
+    formData /* form values */, setFormData /* update form values */,
+    categoryOptions /* select options */,
+    handleInputChange /* set individual field */,
+    handleSelectChange /* set category */,
+    handleSubmit /* create/update record */,
+    columns /* table columns */,
+    records /* saved records */,
+    editingRecord /* currently edited record */, setEditingRecord /* set editing record */,
+    isSubmitting /* submission flag */, setIsSubmitting /* set submission flag */
   }
 }

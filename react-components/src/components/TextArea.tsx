@@ -4,6 +4,7 @@ import { Input } from 'antd';
 // Destructure Ant Design's TextArea component
 const { TextArea: AntTextArea } = Input;
 
+
 /**
  * Enhanced TextArea Component
  * 
@@ -19,8 +20,8 @@ const { TextArea: AntTextArea } = Input;
 const TextArea: React.FC<any> = ({
   label,          // The text label shown above the textarea
   placeholder,    // Hint text when empty
-
-  // onChange,       // Handler for text changes
+  value,          // Current text content
+  handleInputChange,       // Handler for text changes
   required = false, // Default to not show required indicator
   disabled = false, // Default to enabled state
   rows = 4,       // Default visible rows
@@ -49,6 +50,15 @@ const TextArea: React.FC<any> = ({
       <AntTextArea
         // Placeholder text when empty
         placeholder={placeholder}
+        
+        // Current text value
+        value={value}
+        
+        // Handler called on text changes
+        // Receives the React change event
+        onChange={handleInputChange}
+        
+        // Disables interaction when true
         disabled={disabled}
         
         // Visible number of text lines
@@ -60,6 +70,10 @@ const TextArea: React.FC<any> = ({
         // Shows character counter when true
         showCount={showCount}
         
+        // Additional Ant Design TextArea props could be added here:
+        // autoSize - for dynamic height
+        // allowClear - to show clear button
+        // etc.
       />
     </div>
   );
