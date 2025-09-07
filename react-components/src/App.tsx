@@ -1,54 +1,65 @@
-// Import the core React library
+// Import React library for building UI components
 import React from 'react';
-
-// Import Ant Design's ConfigProvider for global theming
+// Import ConfigProvider from Ant Design for theme/context configuration
 import { ConfigProvider } from 'antd';
+// Import Ant Design's CSS reset for consistent styling
+import 'antd/dist/reset.css'; // Import Ant Design styles
+// Import the main CRUD example page/component
+import CrudExample from './pages/CrudExample.tsx';
 
-// Import Ant Design's reset CSS to ensure consistent styling across browsers
-import 'antd/dist/reset.css';
+/**
+ * Main App component
+ * 
+ * This example demonstrates:
+ * ✅ TypeScript with React
+ * ✅ Component-based architecture with Ant Design
+ * ✅ Reusable UI components with proper typing
+ * ✅ Simple CRUD operations (Create, Read, Update, Delete)
+ * ✅ Form validation and state management
+ * ✅ When to use interface vs type (see components for examples)
+ * ✅ Default props with TypeScript
+ * ✅ Generic components (Table component accepts any data type)
+ */
 
-
-// Define the main App component using TypeScript's React.FC (Function Component) type
+// Define the App component as a React functional component with TypeScript
 const App: React.FC = () => {
   return (
-    // ConfigProvider is used to customize the global theme settings for all Ant Design components
+    // Provide Ant Design theme and context to all child components
     <ConfigProvider
       theme={{
         token: {
-          // Set the primary color used across Ant Design components (buttons, links, etc.)
-          colorPrimary: '#1890ff',
-          // Customize the default border radius (e.g., for buttons, cards, inputs)
-          borderRadius: 6,
+          colorPrimary: '#1890ff', // Set the primary color for the theme
+          borderRadius: 6,         // Set the default border radius
         },
       }}
     >
-      {/* Main container with minimum height to fill the screen and a light gray background */}
+      {/* Main container with minimum height and background color */}
       <div style={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
-        {/* Header section of the page with white background, padding, and a subtle shadow */}
+        {/* Header section with background, padding, shadow, and margin */}
         <header style={{ 
           background: '#fff', 
           padding: '16px 24px', 
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)', // light drop shadow
-          marginBottom: '24px' // space below the header
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+          marginBottom: '24px'
         }}>
-          
-          {/* Main heading with no margin and styled in primary color */}
+          {/* Main title with custom color and no margin */}
           <h1 style={{ margin: 0, color: '#1890ff' }}>
             React + TypeScript + Ant Design Component Library
           </h1>
-          
-          {/* Subheading with a smaller font and gray color */}
+          {/* Subtitle/description with muted color and margin */}
           <p style={{ margin: '8px 0 0 0', color: '#666' }}>
             Demonstrating reusable components, proper TypeScript usage, and CRUD operations
           </p>
         </header>
-
-     
         
+        {/* Main content area where the CRUD example is rendered */}
+        <main>
+          <CrudExample />
+        </main>
       </div>
     </ConfigProvider>
   );
 };
 
-// Export the App component as the default export so it can be used in index.tsx or other modules
+// Export the App component as the default export
 export default App;
