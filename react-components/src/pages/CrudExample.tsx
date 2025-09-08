@@ -2,7 +2,7 @@ import React, { useState } from 'react'; // - React core library for component c
 import { Row, Col, message } from 'antd'; // - Ant Design grid components for responsive layout
 import useCrudExample from '../hooks/useCrudExample.tsx'; // - Custom hook containing all CRUD logic and state management
 import CreateUpdateCrudExample from '../components/CreateUpdateCrudExample.tsx'; // - Form component for creating/editing records
-import TabelCrudExample from '../components/TableCrudExample.tsx'; // - Table component for displaying records with actions
+import TableCrudExample from '../components/TableCrudExample.tsx'; // - Table component for displaying records with actions
 
 /**
  * CRUD Example Component
@@ -24,6 +24,7 @@ const CrudExample: React.FC = () => {
 const {
   formData, // - Current form values (name, category, description)
   categoryOptions, // - Static array of dropdown options for category field
+  countryOptions,
   handleInputChange, // - Function for handling text input and textarea changes
   handleSelectChange, // - Function for handling dropdown selection changes
   handleSubmit, // - Async function for create/update operations with validation
@@ -45,6 +46,7 @@ const {
           <CreateUpdateCrudExample
            formData={formData} // - Pass current form values to populate input fields
            categoryOptions={categoryOptions} // - Pass dropdown options for category selection
+           countryOptions={countryOptions}
            handleInputChange={handleInputChange} // - Pass input change handler for text fields
            handleSelectChange={handleSelectChange} // - Pass selection handler for dropdown
            handleSubmit={handleSubmit} // - Pass submit handler for form processing
@@ -56,7 +58,7 @@ const {
 
         {/* Table Section (right column on desktop) */}
         <Col xs={24} lg={16}> {/* - Full width on mobile (xs=24), 2/3 width on large screens (lg=16) */}
-          <TabelCrudExample 
+          <TableCrudExample 
               columns={columns} // - Pass table column configuration with sorting and filtering
               records={records} // - Pass data array for table rows
               handleEdit={handleEdit} // - Pass edit handler for Edit button clicks

@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
-import { Row, Col, message } from 'antd';
+import { message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 
 export default function useCrudExample() {
   const [formData, setFormData] = useState({
     name: '',
+    surname: '',
+    email: '',
     category: '',
+    country: '',
     description: '',
   }); // - Form state object that holds current input values for create/edit operations
 
@@ -13,6 +16,15 @@ export default function useCrudExample() {
   const [records, setRecords] = useState<any[]>([]); // - Array holding all CRUD records, simulates database storage in memory
   const [editingRecord, setEditingRecord] = useState<any | null>(null); // - Currently selected record for editing, null when creating new record
   const [isSubmitting, setIsSubmitting] = useState(false); // - Loading state to prevent multiple form submissions and show loading UI
+
+
+    const countryOptions: any[] = [
+  { label: 'Azerbaijan', value: 'azerbaijan' },
+  { label: 'Türkiye', value: 'turkiye' }, 
+  { label: 'USA', value: 'usa' },
+  { label: 'Germany', value: 'germany' },
+  { label: 'UK', value: 'uk' },
+];
 
   // Category options for the select dropdown
   const categoryOptions: any[] = [
@@ -37,9 +49,10 @@ export default function useCrudExample() {
    * Handles select dropdown changes
    * @param value - The selected value
    */
-  const handleSelectChange = (value: string) => {
-    setFormData(prev => ({ ...prev, category: value })); // - Updates only the category field in formData state while preserving other fields (name, description)
-  }; // - This function is called by SelectBox component when user selects a different category option
+  const handleSelectChange = (field: 'category' | 'country', value: string) => {
+  setFormData(prev => ({ ...prev, [field]: value }));
+};
+
 
   /**
    * Handles form submission for both create and update operations
@@ -50,9 +63,22 @@ export default function useCrudExample() {
       message.error('Name is required'); // - Shows error toast if name field is empty or only whitespace
       return; // - Exit early to prevent form submission
     }
+    if (!formData.surname.trim()) {
+      message.error('Surname is required'); 
+      return; 
+    }
+ if (!formData.email.trim()) {
+      message.error('Email is required'); 
+      return; 
+    }
+
     if (!formData.category) {
       message.error('Category is required'); // - Shows error toast if no category is selected
       return; // - Exit early to prevent form submission
+    }
+     if (!formData.country) {
+      message.error('Country is required'); 
+      return; 
     }
 
     setIsSubmitting(true); // - Set loading state to disable form and show loading indicators
@@ -84,7 +110,7 @@ export default function useCrudExample() {
       }
 
       // Reset form
-      setFormData({ name: '', category: '', description: '' }); // - Clear form fields after successful submission
+      setFormData({ name: '', surname: '', email: '', category: '', country: '', description: '' }); // - Clear form fields after successful submission
     } catch (error) {
       message.error('An error occurred. Please try again.'); // - Show generic error message for any failures
     } finally {
@@ -99,7 +125,10 @@ export default function useCrudExample() {
   const handleEdit = (record: any) => {
     setFormData({
       name: record.name,
+      surname: record.surname,
+      email: record.email,
       category: record.category,
+      country: record.country,
       description: record.description,
     }); // - Populate form fields with values from selected record for editing
     setEditingRecord(record); // - Set current record as being edited, changes form to update mode
@@ -117,7 +146,7 @@ export default function useCrudExample() {
     // Clear edit state if deleting the record being edited
     if (editingRecord?.id === record.id) {
       setEditingRecord(null); // - Clear edit state if deleted record was being edited
-      setFormData({ name: '', category: '', description: '' }); // - Reset form fields to prevent editing deleted record
+      setFormData({ name: '', surname:'', email:'', category: '', country:'', description: '' }); // - Reset form fields to prevent editing deleted record
     } // - Handles edge case where user deletes record that's currently loaded in form
   };
 
@@ -126,7 +155,7 @@ export default function useCrudExample() {
    */
   const handleCancelEdit = () => {
     setEditingRecord(null); // - Clear currently editing record, returns form to create mode
-    setFormData({ name: '', category: '', description: '' }); // - Reset all form fields to empty values
+    setFormData({name: '', surname:'', email:'', category: '', country:'', description: '' }); // - Reset all form fields to empty values
     message.info('Edit cancelled'); // - Show info toast to confirm edit operation was cancelled
   };
 
@@ -138,12 +167,32 @@ export default function useCrudExample() {
       key: 'name',
       sorter: (a, b) => a.name.localeCompare(b.name), // - Alphabetical sorting for name column using locale-aware comparison
     },
+{
+      title: 'Surname',
+      dataIndex: 'surname',
+      key: 'surname',
+      sorter: (a, b) => a.surname.localeCompare(b.surname), // - Alphabetical sorting for name column using locale-aware comparison
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+      sorter: (a, b) => a.email.localeCompare(b.email), // - Alphabetical sorting for name column using locale-aware comparison
+    },
+
     {
       title: 'Category',
       dataIndex: 'category',
       key: 'category',
       filters: categoryOptions.map(opt => ({ text: opt.label, value: opt.value })), // - Create filter options from categoryOptions array
       onFilter: (value, record) => record.category === value, // - Filter function to show only records matching selected category
+    },
+     {
+      title: 'Country',
+      dataIndex: 'country',
+      key: 'country', 
+      filters: countryOptions.map(opt => ({ text: opt.label, value: opt.value })),
+      onFilter: (value, record) => record.country === value,
     },
     {
       title: 'Description',
@@ -162,6 +211,7 @@ export default function useCrudExample() {
   return {
     formData, setFormData, // - Current form state and setter for direct manipulation if needed
     categoryOptions, // - Static array of category options for dropdown component
+    countryOptions,
     handleInputChange, // - Curried function for handling input/textarea changes
     handleSelectChange, // - Function for handling dropdown selection changes
     handleSubmit, // - Async function for create/update operations with validation
